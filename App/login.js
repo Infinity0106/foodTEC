@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, TouchableHighlight, WebView, Dimensions, TouchableOpacity, AsyncStorage } from 'react-native';
+import { StyleSheet, View, Text, TouchableHighlight, WebView, Dimensions, TouchableOpacity, AsyncStorage, Platform } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import { FBLoginManager } from 'react-native-facebook-login';
 import * as firebase from 'firebase';
@@ -18,7 +18,11 @@ export default class login extends Component {
     }
   }
   componentWillMount(){
-    FBLoginManager.setLoginBehavior(FBLoginManager.LoginBehaviors.Web);
+    if(Platform.OS=="ios"){
+      FBLoginManager.setLoginBehavior(FBLoginManager.LoginBehaviors.Web);
+    }else{
+      FBLoginManager.setLoginBehavior(FBLoginManager.LoginBehaviors.Native);
+    }
     // OneSignal.addEventListener('ids', this.onIds.bind(this));
   }
   onIds(device) {

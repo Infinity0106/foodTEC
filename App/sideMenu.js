@@ -77,6 +77,9 @@ export default class SideMenu3D extends Component{
             {this.renderSideMenu()}
           </ScrollView>
         </View>
+        <TouchableWithoutFeedback onPress={()=>this.props.OnPress()}>
+          <View style={[styles.frontleft,{zIndex:(this.state.bringFront?1000:-1),width:Dimensions.get("window").width*.45,}]}></View>
+        </TouchableWithoutFeedback>
         <View style={[styles.full]}>
         <Animated.View style={[styles.full,{
           transform: [
@@ -186,6 +189,14 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     right: 0,
+    bottom: 0
+  },
+  frontleft:{
+    backgroundColor:'transparent',
+    position:'absolute',
+    top: 0,
+    right: 0,
+    left: Dimensions.get("window").width*.55,
     bottom: 0
   },
   back:{

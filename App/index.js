@@ -3,7 +3,6 @@ import { StyleSheet, View, Text } from 'react-native';
 import { Router, Scene, ActionConst } from 'react-native-router-flux';
 import * as firebase from 'firebase';
 import Login from './login';
-import Home from './home';
 import Redirect from './redirect';
 import Drawer from './drawer';
 import BuyToGO from './buyToGo';
@@ -34,7 +33,7 @@ export default class index extends Component {
         <Scene key="root">
           <Scene key="redirect" component={Redirect} title="redirect" hideNavBar/>
           <Scene key="login" component={Login} title="Login" hideNavBar/>
-          <Scene key="drawer" component={Drawer} open={false} hideNavBar/>
+          <Scene key="drawer" component={Drawer} open={false}hideNavBar/>
           <Scene key="buyToGo" component={BuyToGO} title="buy" hideNavBar/>
         </Scene>
       </Router>
