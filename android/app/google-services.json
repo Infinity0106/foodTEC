@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "763370482980",
+    "firebase_url": "https://foodtec-d3882.firebaseio.com",
+    "project_id": "foodtec-d3882",
+    "storage_bucket": "foodtec-d3882.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:763370482980:android:04f2f818c3b79ff9",
+        "android_client_info": {
+          "package_name": "com.foodtec"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "763370482980-so6jv3lhgse0fhkhsh78vislunuonemh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAfjGFQTL_UDWEeLthN36F55x8LW29ha3g"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

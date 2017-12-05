@@ -3,7 +3,7 @@ package com.foodtec;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
-import com.facebook.FacebookSdk;
+import com.evollu.react.fcm.FIRMessagingPackage;
 import com.facebook.CallbackManager;
 import com.facebook.appevents.AppEventsLogger;
 import com.magus.fblogin.FacebookLoginPackage;
@@ -40,7 +40,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            new FBSDKPackage(mCallbackManager),
+            new FIRMessagingPackage(),
             new FacebookLoginPackage(),
             new VectorIconsPackage(),
             new ImageResizerPackage(),
