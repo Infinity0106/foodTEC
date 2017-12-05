@@ -8,7 +8,6 @@ import AppIntro from 'react-native-app-intro';
 import Location from '../svgComponents/Location';
 import Deliver from '../svgComponents/Deliver';
 import Cause from '../svgComponents/Cause';
-// import OneSignal from 'react-native-onesignal';
 
 export default class login extends Component {
   constructor(props){
@@ -21,9 +20,8 @@ export default class login extends Component {
     if(Platform.OS=="ios"){
       FBLoginManager.setLoginBehavior(FBLoginManager.LoginBehaviors.Web);
     }else{
-      FBLoginManager.setLoginBehavior(FBLoginManager.LoginBehaviors.Native);
+      FBLoginManager.setLoginBehavior(FBLoginManager.LoginBehaviors.WebView);
     }
-    // OneSignal.addEventListener('ids', this.onIds.bind(this));
   }
   onIds(device) {
     console.log('Device info: ', device);
@@ -47,10 +45,10 @@ export default class login extends Component {
               faceID:user.providerData[0].uid,
             })
             AsyncStorage.setItem("user",JSON.stringify(user));
-            Actions.home();
+            // Actions.drawer({ type: "reset" });
           }
         }).catch(function(error){
-          
+          console.log(error);
         });
       } else {
         console.log(error, data);
@@ -104,7 +102,6 @@ export default class login extends Component {
 
   }
   componentWillUnmount(){
-    // OneSignal.removeEventListener('ids', this.onIds);
   }
 }
 const styles = StyleSheet.create({
