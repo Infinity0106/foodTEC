@@ -22,15 +22,26 @@ export default class buyToGo extends Component {
     this.state = {
       location: "",
       wapp: "",
-      uid: ""
+      uid: "",
+      foto: ""
     };
   }
   componentWillMount() {
+    console.log(this.props.data.uid);
     var self = this;
-    AsyncStorage.getItem("user", (e, r) => {
-      r = JSON.parse(r);
-      self.setState({ uid: r.uid });
-    });
+    firebase
+      .database()
+      .ref()
+      .child("users")
+      .child(this.props.data.uid)
+      .once("value", s => {
+        self.setState({ uid: self.props.data.uid, foto: s.val().photo });
+      });
+    // AsyncStorage.getItem("user", (e, r) => {
+    //   r = JSON.parse(r);
+    //   console.log(r);
+    //   self.setState({ uid: r.uid });
+    // });
   }
   error() {
     Platform.select({
@@ -39,8 +50,50 @@ export default class buyToGo extends Component {
         ToastAndroid.show("faltan campos por llenar", ToastAndroid.SHORT)
     })();
   }
+  mandarNot(user) {
+    var body = JSON.stringify({
+      to: user.fcmToken,
+      data: {
+        custom_notification: {
+          body: "checa quien fue",
+          title: "tienes una nueva orden",
+          color: "#00ACD4",
+          priority: "high",
+          id: Date.now().toString(),
+          show_in_foreground: true,
+          sound: "default",
+          click_action: "fcm.ACTION.OPEN_NOTIFICATION",
+          vibrate: 300,
+          lights: true
+        }
+      },
+      priority: "high",
+      click_action: "fcm.ACTION.OPEN_NOTIFICATION"
+    });
+
+    let headers = new Headers({
+      "Content-Type": "application/json",
+      "Content-Length": parseInt(body.length),
+      Authorization:
+        "key=AAAAsbxtLSQ:APA91bFxWUj_wNVBwEWm7N4xaywT2LtE55xxxbXU7qgvR2oXe8-0Wxr5bTzteXFEYXsP-_sEEPfwhHNJrRXUD-cp1C7zXHGJty6-fHVhq40ZbbBgsBcrbIE2-XduQVkzl2zcn8bJm3dN"
+    });
+
+    fetch("https://fcm.googleapis.com/fcm/send", {
+      method: "POST",
+      headers,
+      body
+    }).then(res => {
+      console.log(res);
+      Platform.select({
+        ios: () => AlertIOS.alert("SUCCESS", "Orden exitosa"),
+        android: () => ToastAndroid.show("Orden exitosa", ToastAndroid.SHORT)
+      })();
+      Actions.pop();
+    });
+  }
   placeOrder() {
     if (this.state.location != "" && this.state.wapp != "") {
+      var self = this;
       firebase
         .database()
         .ref()
@@ -52,31 +105,27 @@ export default class buyToGo extends Component {
           sellerID: this.state.uid
         })
         .then(() => {
-          var message = {
-            app_id: "c40707d3-943a-4c14-87dc-a482ee79efd3",
-            contents: { en: "English Message" },
-            include_player_ids: ["af19b6d8-ef6b-4c9f-b1d3-ba3d35c76c0f"]
-          };
-          Platform.select({
-            ios: () => AlertIOS.alert("SUCCESS", "Orden exitosa"),
-            android: () =>
-              ToastAndroid.show("Orden exitosa", ToastAndroid.SHORT)
-          })();
-          Actions.pop();
+          firebase
+            .database()
+            .ref()
+            .child("users")
+            .child(this.props.data.uid)
+            .once("value", s => {
+              self.mandarNot(s.val());
+            });
         });
     } else {
       this.error();
     }
   }
   render() {
-    console.log(this.props);
     return (
       <View style={styles.container}>
         <Header back={true} />
         <View style={[styles.container, { marginHorizontal: 5 }]}>
           <View style={styles.renderImage}>
             <Image
-              source={{ uri: this.props.fotoUser }}
+              source={{ uri: this.state.foto }}
               style={{ width: 150, height: 150, borderRadius: 150 / 2 }}
             />
           </View>

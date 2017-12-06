@@ -43,7 +43,6 @@ export default class drawer extends Component {
     var self = this;
     AsyncStorage.getItem("user", (e, res) => {
       res = JSON.parse(res);
-      console.log(res);
       self.setState({
         foto:
           res != null
@@ -58,7 +57,6 @@ export default class drawer extends Component {
     Actions.refresh({ key: "drawer", open: !this.props.open });
   }
   render() {
-    console.log(Actions);
     return (
       <SideMenu3D
         Visible={this.props.open}
@@ -225,7 +223,7 @@ export default class drawer extends Component {
                 .then(() => {
                   FBLoginManager.logout((e, d) => {
                     if (!e) {
-                      AsyncStorage.clear();
+                      AsyncStorage.removeItem("user");
                     }
                   });
                 });

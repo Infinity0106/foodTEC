@@ -16,6 +16,7 @@ export default class nameClass extends Component {
     this.state = {
       device: ""
     };
+    this.listener = null;
   }
 
   componentWillMount() {
@@ -25,12 +26,27 @@ export default class nameClass extends Component {
     FCM.requestPermissions()
       .then(() => console.log("granted"))
       .catch(() => console.log("notification permission rejected"));
-    FCM.getFCMToken().then(token => {
-      console.log("TOKEN (getFCMToken)", token);
-    });
 
     firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
+        FCM.getFCMToken().then(token => {
+          firebase
+            .database()
+            .ref()
+            .child("users")
+            .child(user.uid)
+            .child("fcmToken")
+            .set(token);
+        });
+        self.listener = FCM.on(FCMEvent.RefreshToken, token => {
+          firebase
+            .database()
+            .ref()
+            .child("users")
+            .child(user.uid)
+            .child("fcmToken")
+            .set(token);
+        });
         requestAnimationFrame(() => {
           Actions.drawer({ type: "reset" });
         });
@@ -52,7 +68,9 @@ export default class nameClass extends Component {
   componentDidMount() {}
   componentWillUnmount() {
     // this.notificationListner.remove();
-    // this.refreshTokenListener.remove();
+    if (this.listener != null) {
+      this.listener.remove();
+    }
   }
 }
 const styles = StyleSheet.create({
